@@ -351,6 +351,19 @@ void AppsContainer::run() {
      * switching to the first app, because the first app might create nodes on
      * the pool. */
     bool switched;
+#if ENABLE_RPI && RPI_AUTOSTART
+    App::Snapshot * rpiSnapshot = nullptr;
+    Rpi::App::Snapshot rpiProbe;
+    for (int i = 0; i < numberOfApps(); i++) {
+      if (appSnapshotAtIndex(i)->descriptor() == rpiProbe.descriptor()) {
+        rpiSnapshot = appSnapshotAtIndex(i);
+      }
+    }
+    if (m_startAppSnapshot == nullptr && rpiSnapshot != nullptr) {
+      Ion::Backlight::init();
+      m_startAppSnapshot = rpiSnapshot;
+    }
+#endif
     if (m_startAppSnapshot != nullptr) {
       switched = switchTo(m_startAppSnapshot);
     } else {

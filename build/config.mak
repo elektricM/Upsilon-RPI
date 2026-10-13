@@ -24,3 +24,9 @@ ifeq ($(ENABLE_RPI),1)
 SFLAGS += -DENABLE_RPI=1
 EPSILON_APPS += rpi
 endif
+
+# Development: open the Pi app at boot, so the Pi powers up after a reflash
+RPI_AUTOSTART ?= 0
+ifeq ($(RPI_AUTOSTART),1)
+SFLAGS += -DRPI_AUTOSTART=1
+endif
